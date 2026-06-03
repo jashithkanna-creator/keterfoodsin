@@ -48,4 +48,4 @@ waitForPort = 5000
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bash", "-c", "pip install -r requirements.txt && gunicorn --bind=0.0.0.0:8080 app:app"]
+run = ["bash", "-c", "pip install -r requirements.txt && gunicorn --bind=0.0.0.0:8501 app:app"]
