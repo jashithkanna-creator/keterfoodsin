@@ -1,5 +1,5 @@
 modules = ["python-3.10"]
-run = "streamlit run app.py --server.port 8080 --server.address 0.0.0.0"
+run = "python app.py"
 
 [packager]
 language = "python"
@@ -13,8 +13,11 @@ expertMode = true
 localPort = 5000
 
 [[ports]]
-localPort = 8502
+localPort = 8501
 externalPort = 80
+
+[[ports]]
+localPort = 8502
 
 [[ports]]
 localPort = 8503
@@ -46,6 +49,3 @@ waitForPort = 5000
 [deployment]
 deploymentTarget = "autoscale"
 run = ["gunicorn", "--bind=0.0.0.0:5000", "app:app"]
-
-
-
