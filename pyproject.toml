@@ -1,0 +1,7 @@
+[project]
+name = "my-streamlit-app"
+version = "0.1.0"
+dependencies = [
+    "streamlit",
+    "streamlit-autorefresh"
+]
