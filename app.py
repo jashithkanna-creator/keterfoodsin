@@ -56,4 +56,3 @@ The vision for Keterfoods extends far beyond current product lines. It is center
 
 Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard-bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
 """)
-st.button("dehydrated fruits")
