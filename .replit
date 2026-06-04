@@ -11,13 +11,7 @@ expertMode = true
 
 [[ports]]
 localPort = 5000
-
-[[ports]]
-localPort = 8501
 externalPort = 80
-
-[[ports]]
-localPort = 8502
 
 [[ports]]
 localPort = 8503
@@ -43,9 +37,9 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python app.py"
+args = "streamlit run app.py --server.port 5000 --server.address 0.0.0.0 --server.enableCORS false --server.enableXsrfProtection false --server.headless true"
 waitForPort = 5000
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bash", "-c", "pip install -r requirements.txt && gunicorn --bind=0.0.0.0:8501 app:app"]
+run = ["bash", "-c", "pip install -r requirements.txt && streamlit run app.py --server.port 8501 --server.address 0.0.0.0 --server.enableCORS false --server.enableXsrfProtection false --server.headless true"]
