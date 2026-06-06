@@ -56,17 +56,40 @@ The vision for Keterfoods extends far beyond current product lines. It is center
 
 Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard-bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
 """)
-if slide_index is not in st.session_state:
-   st.session_state.slide_index=0
-slides=[
-    "static/image/dehydrated-food.jpeg",
-    "static/images/tamarind-powder.jpeg"
-    "static/images/dried-vegetables.jpeg"
-]
-# 2. Create the Manual Slider UI
-slider_container = st.container(border=True)
-with slider_container:
-    current_slide = slides[st.session_state.slide_index]
+    # 1. Initialize the slide counter session key if missing
+    if "slide_index" not in st.session_state:
+        st.session_state.slide_index = 0
+
+    # 2. Define the static rotating slideshow dictionary data
+    slides = [
+        {
+            'image': 'static/images/dehydrated-fruits.jpeg',
+            'title': 'Dehydrated Fruits',
+            'desc': 'Naturally sweet dehydrated fruits.'
+        },
+        {
+            'image': 'static/images/tamarind-powder.jpeg',
+            'title': 'Spice and Powders',
+            'desc': 'Finely processed aromatic dehydrated whole spices.'
+        },
+        {
+            'image': 'static/images/dried-vegetables.jpeg',
+            'title': 'Dehydrated Vegetables',
+            'desc': 'Premium dehydrated vegetables.'
+        }
+    ]
+
+    # 3. Build and render the user interface frame
+    slider_container = st.container(border=True)
+    with slider_container:
+        # Safely look up the active index object data
+        current_slide = slides[st.session_state.slide_index]
+
+        # Render out components sequentially down the card
+        st.image(current_slide['image'], use_container_width=True)
+        st.markdown(f"<h3 style='text-align: center;'>{current_slide['title']}</h3>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; color: gray;'>{current_slide['desc']}</p>", unsafe_allow_html=True)
+
 
     # Display the current banner image & text
     st.image(current_slide["image"], use_container_width=True)
