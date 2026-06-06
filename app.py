@@ -22,7 +22,8 @@ st.markdown("""
 # Hero Images
 hero_images = [
     "static/images/keter-hero.png",
-    "static/images/product-spice.png"
+    "static/images/product-spice.png",
+    "static/images/dehydrated-fruits.jpeg"
 ]
 
 # Auto refresh every 10 seconds
