@@ -1,10 +1,8 @@
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
-# 1. Force the layout to use the entire width of your iPad screen
 st.set_page_config(layout="wide")
 
-# 2. Add custom CSS to style the background and cards
 st.markdown("""
 <style>
 .stApp {
@@ -19,19 +17,17 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Hero Images
+# Hero Images - all 5 images rotate every 5 seconds
 hero_images = [
     "static/images/keter-hero.png",
     "static/images/product-spice.png",
+    "static/images/dehydrated-fruits.jpeg",
+    "static/images/tamarind-powder.jpeg",
+    "static/images/dried-vegetables.jpeg"
 ]
 
-# Auto refresh every 10 seconds
-count = st_autorefresh(interval=10000, key="refresh")
-
-# Change image on each refresh
+count = st_autorefresh(interval=5000, key="refresh")
 hero_index = count % len(hero_images)
-
-# Display current image
 st.image(hero_images[hero_index], use_container_width=True)
 
 # --- Rest of your page starts here ---
@@ -56,11 +52,5 @@ The vision for Keterfoods extends far beyond current product lines. It is center
 
 Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard-bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
 """)
-if slide_index is not in st.session_state:
-   st.session_state.slide_index=0
-slides=[
-    "static/image/dehydrated-food.jpeg",
-    "static/images/tamarind-powder.jpeg"
-    "static/images/dried-vegetables.jpeg"
-]
-  
+
+st.button("Dehydrated Fruits")
