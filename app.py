@@ -60,6 +60,7 @@ if slide_index is not in st.session_state:
    st.session_state.slide_index=0
 slides=[
     {images:static/image/dehydrated-food.png}
+    {static/images/tamarind-powder.jpeg}
     {}
 ]
   
