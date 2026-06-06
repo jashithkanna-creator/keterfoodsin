@@ -59,8 +59,8 @@ Ultimately, Keterfoods is not just selling food; it is building a system that va
 if slide_index is not in st.session_state:
    st.session_state.slide_index=0
 slides=[
-    {images:static/image/dehydrated-food.png}
+    {images:static/image/dehydrated-food.jpeg}
     {static/images/tamarind-powder.jpeg}
-    {}
+    {static/images/dried-vegetables.jpeg}
 ]
   
