@@ -23,7 +23,6 @@ st.markdown("""
 hero_images = [
     "static/images/keter-hero.png",
     "static/images/product-spice.png",
-    "static/images/dehydrated-fruits.jpeg"
 ]
 
 # Auto refresh every 10 seconds
@@ -57,3 +56,10 @@ The vision for Keterfoods extends far beyond current product lines. It is center
 
 Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard-bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
 """)
+if slide_index is not in st.session_state:
+   st.session_state.slide_index=0
+slides=[
+    {images:static/image/dehydrated-food.png}
+    {}
+]
+  
