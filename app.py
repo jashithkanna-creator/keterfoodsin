@@ -15,23 +15,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- Manual Hero Slideshow ---
-# 1. Initialize the slide index tracking cleanly at the root level (Zero Spaces)
-if "slide_index" not in st.session_state:
-    st.session_state.slide_index = 0
-
-# 2. Your full list of 5 slideshow images
-hero_images = [
-    "static/images/keter-hero.png",
-    "static/images/product-spice.png",
-    "static/images/dehydrated-fruits.jpeg",
-    "static/images/tamarind-powder.jpeg",
-    "static/images/dried-vegetables.jpeg"
-]
-
-# Display the currently selected image
-st.image(hero_images[st.session_state.slide_index], use_container_width=True)
-
+# --- Hero Banner Image ---
+# Displays your main hero banner statically without navigation buttons
+st.image("static/images/keter-hero.png", use_container_width=True)
 
 
 # --- About Us ---
@@ -65,79 +51,19 @@ st.write("---")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-  with st.container(border=True):
-      st.markdown("<h4 style='text-align: center;'>DEHYDRATED VEGETABLES</h4>", unsafe_allow_html=True)
-      st.write("Premium vegetables keeping natural nutrients completely intact.")
-
-      if st.button("View Products", key="veg_btn"):
-          st.session_state.catalog = "vegetables"
+    with st.container(border=True):
+        st.markdown("<h4 style='text-align: center;'>DEHYDRATED VEGETABLES</h4>", unsafe_allow_html=True)
+        st.write("Premium vegetables keeping natural nutrients completely intact.")
+        st.button("View Products", key="veg_btn")
 
 with col2:
-  with st.container(border=True):
-      st.markdown("<h4 style='text-align: center;'>DEHYDRATED FRUITS</h4>", unsafe_allow_html=True)
-      st.write("Naturally sweet dehydrated fruits without any added chemical preservatives.")
-
-      if st.button("View Products", key="fruit_btn"):
-          st.session_state.catalog = "fruits"
+    with st.container(border=True):
+        st.markdown("<h4 style='text-align: center;'>DEHYDRATED FRUITS</h4>", unsafe_allow_html=True)
+        st.write("Naturally sweet dehydrated fruits without any added chemical preservatives.")
+        st.button("View Products", key="fruit_btn")
 
 with col3:
-  with st.container(border=True):
-      st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
-      st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
-
-      if st.button("View Products", key="spices_btn"):
-          st.session_state.catalog = "spices"
-  st.write("---")
-
-  if st.session_state.catalog == "vegetables":
-        st.header("Dehydrated Vegetables Catalogue")
-
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            st.image("static/images/onion.jpeg")
-            st.subheader("Dehydrated Onion")
-
-        with col2:
-            st.image("static/images/tomato.jpeg")
-            st.subheader("Dehydrated Tomato")
-
-        with col3:
-            st.image("static/images/carrot.jpeg")
-            st.subheader("Dehydrated Carrot")
-
-
-  elif st.session_state.catalog == "fruits":
-        st.header("Dehydrated Fruits Catalogue")
-
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            st.image("static/images/mango.jpeg")
-            st.subheader("Dehydrated Mango")
-
-        with col2:
-            st.image("static/images/banana.jpeg")
-            st.subheader("Dehydrated Banana")
-
-        with col3:
-            st.image("static/images/pineapple.jpeg")
-            st.subheader("Dehydrated Pineapple")
-
-
-  elif st.session_state.catalog == "spices":
-        st.header("Spices & Powders Catalogue")
-
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            st.image("static/images/tamarind-powder.jpeg")
-            st.subheader("Tamarind Powder")
-
-        with col2:
-            st.image("static/images/chilli-powder.jpeg")
-            st.subheader("Chilli Powder")
-
-        with col3:
-            st.image("static/images/ginger-powder.jpeg")
-            st.subheader("Ginger Powder")
+    with st.container(border=True):
+        st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
+        st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
+        st.button("View Products", key="spices_btn")
