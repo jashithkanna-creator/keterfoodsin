@@ -53,7 +53,7 @@ def show_homepage():
     st.markdown("<h2 style='text-align: center;'>OUR <span style='color: #2ecc71;'>PRODUCTS</span></h2>", unsafe_allow_html=True)
     st.write("---")
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3,col4 = st.columns(4)
 
     with col1:
         with st.container(border=True):
@@ -78,13 +78,20 @@ def show_homepage():
             if st.button("View Products", key="spices_btn"):
                 st.session_state.page = "spices"
                 st.rerun()
+    with col4:
+        with st.container(border=True):
+            st.markdown("<h4 style='text-align: center;'>PICKLES,CHAPATHI & POORI</h4>", unsafe_allow_html=True)
+            st.write("l.")
+            if st.button("View Products", key="spices_btn"):
+                st.session_state.page = "spices"
+                st.rerun()
+      
 
 
 def show_vegetables_page():
     if st.button("⬅️ Back to Homepage", key="back_veg"):
         st.session_state.page = "home"
         st.rerun()
-    st.title("🧅 Dehydrated Vegetables Catalog")
     st.write("---")
     st.write("Premium selections coming soon.")
 
@@ -93,7 +100,6 @@ def show_fruits_page():
     if st.button("⬅️ Back to Homepage", key="back_fruit"):
         st.session_state.page = "home"
         st.rerun()
-    st.title("🍓 Dehydrated Fruits Catalog")
     st.write("---")
     st.write("Premium selections coming soon.")
 
@@ -102,7 +108,6 @@ def show_spices_page():
     if st.button("⬅️ Back to Homepage", key="back_spices"):
         st.session_state.page = "home"
         st.rerun()
-    st.title("🌶️ Spices & Aromatic Powders Catalog")
     st.write("---")
     st.write("Premium selections coming soon.")
 
