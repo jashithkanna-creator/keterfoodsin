@@ -1,17 +1,34 @@
 import streamlit as st
-
 st.set_page_config(layout="wide")
-
 st.markdown("""
 <style>
+/* Style the navigation buttons to look like a modern navbar block */
+div.stButton > button:first-child {
+    background-color: #ffffff;
+    color: #2c3e50;
+    border: 1px solid #e0e0e0;
+    padding: 10px 24px;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+div.stButton > button:first-child:hover {
+    border-color: #2ecc71;
+    color: #2ecc71;
+    background-color: #fafffa;
+}
 .stApp {
     background-color: #FDFBF7;
 }
 .block-container {
-    padding-top: 2rem;
+    padding-top: 1rem;
     padding-bottom: 2rem;
     max-width: 95% !important;
 }
+</style>
+""", unsafe_allow_html=True)
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -81,9 +98,9 @@ def show_homepage():
     with col4:
         with st.container(border=True):
             st.markdown("<h4 style='text-align: center;'>PICKLES,CHAPATHI & POORI</h4>", unsafe_allow_html=True)
-            st.write("l.")
-            if st.button("View Products", key="spices_btn"):
-                st.session_state.page = "spices"
+            st.write("chapatis and pooris made from whole wheat flour")
+            if st.button("View Products", key="OTHER_btn"):
+                st.session_state.page = "OTHER"
                 st.rerun()
       
 
