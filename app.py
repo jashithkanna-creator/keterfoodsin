@@ -105,36 +105,58 @@ def show_homepage():
       
 
 
-def show_vegetables_page():
-    if st.button("⬅️ Back to Homepage", key="back_veg"):
-        st.session_state.page = "home"
-        st.rerun()
+  def show_vegetables_page():
+    nav_col, title_col = st.columns([1, 4])
+    with nav_col:
+        if st.button("🏠 Home", key="back_veg"):
+            st.session_state.page = "home"
+            st.rerun()
+    with title_col:
+        st.markdown("<h2 style='margin:0; padding:0;'>🧅 Dehydrated Vegetables</h2>", unsafe_allow_html=True)
     st.write("---")
     st.write("Premium selections coming soon.")
 
-
-def show_fruits_page():
-    if st.button("⬅️ Back to Homepage", key="back_fruit"):
-        st.session_state.page = "home"
-        st.rerun()
+  def show_fruits_page():
+    nav_col, title_col = st.columns([1, 4])
+    with nav_col:
+        if st.button("🏠 Home", key="back_fruit"):
+            st.session_state.page = "home"
+            st.rerun()
+    with title_col:
+        st.markdown("<h2 style='margin:0; padding:0;'>🍓 Dehydrated Fruits</h2>", unsafe_allow_html=True)
     st.write("---")
     st.write("Premium selections coming soon.")
 
-
-def show_spices_page():
-    if st.button("⬅️ Back to Homepage", key="back_spices"):
-        st.session_state.page = "home"
-        st.rerun()
+  def show_spices_page():
+    nav_col, title_col = st.columns([1, 4])
+    with nav_col:
+        if st.button("🏠 Home", key="back_spices"):
+            st.session_state.page = "home"
+            st.rerun()
+    with title_col:
+        st.markdown("<h2 style='margin:0; padding:0;'>🌶️ Spices & Powders</h2>", unsafe_allow_html=True)
     st.write("---")
     st.write("Premium selections coming soon.")
 
+  def show_other_page():
+    nav_col, title_col = st.columns([1, 4])
+    with nav_col:
+        if st.button("🏠 Home", key="back_other"):
+            st.session_state.page = "home"
+            st.rerun()
+    with title_col:
+        st.markdown("<h2 style='margin:0; padding:0;'>🥞 Pickles, Chapathi & Poori</h2>", unsafe_allow_html=True)
+    st.write("---")
+    st.write("Premium selections coming soon.")
 
-# --- 3. PAGE ROUTER CONTROL ---
-if st.session_state.page == "home":
+  # --- 3. PAGE ROUTER CONTROL ---
+  if st.session_state.page == "home":
     show_homepage()
-elif st.session_state.page == "vegetables":
+  elif st.session_state.page == "vegetables":
     show_vegetables_page()
-elif st.session_state.page == "fruits":
+  elif st.session_state.page == "fruits":
     show_fruits_page()
-elif st.session_state.page == "spices":
+  elif st.session_state.page == "spices":
     show_spices_page()
+  elif st.session_state.page == "OTHER":
+    show_other_page()
