@@ -32,18 +32,6 @@ hero_images = [
 # Display the currently selected image
 st.image(hero_images[st.session_state.slide_index], use_container_width=True)
 
-# 3. Add manual navigation control buttons directly below the image
-prev_col, space, next_col = st.columns([1, 8, 1])
-
-with prev_col:
-    if st.button("⬅️ Prev", key="prev_slide"):
-        st.session_state.slide_index = (st.session_state.slide_index - 1) % len(hero_images)
-        st.rerun()
-
-with next_col:
-    if st.button("Next ➡️", key="next_slide"):
-        st.session_state.slide_index = (st.session_state.slide_index + 1) % len(hero_images)
-        st.rerun()
 
 
 # --- About Us ---
