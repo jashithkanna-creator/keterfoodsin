@@ -1,5 +1,8 @@
 import streamlit as st
+
+# --- 0. PAGE CONFIG & STYLING ---
 st.set_page_config(layout="wide")
+
 st.markdown("""
 <style>
 /* Style the navigation buttons to look like a modern navbar block */
@@ -29,8 +32,6 @@ div.stButton > button:first-child:hover {
 </style>
 """, unsafe_allow_html=True)
 
-</style>
-""", unsafe_allow_html=True)
 
 # --- 1. INITIALIZE NAVIGATION STATE ---
 if "page" not in st.session_state:
@@ -46,20 +47,16 @@ def show_homepage():
     # About Us Section
     st.header("About us")
     st.subheader("The Keterfoods Philosophy: A Foundation of Excellence")
-    st.write("""In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a testament to the belief that high quality, processed food products can be both accessible and reliable. By harmonizing rigorous quality standards with a vision for sustainable growth, Keterfoods is redefining what it means to be a trusted provider in the modern food market.
-    """)
+    st.write("""In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a testament to the belief that high quality, processed food products can be both accessible and reliable. By harmonizing rigorous quality standards with a vision for sustainable growth, Keterfoods is redefining what it means to be a trusted provider in the modern food market. """)
 
     st.subheader("Quality and Reliability")
     st.write("""The dehydration process is often misunderstood as a simple reduction of moisture, but for Keterfoods, it is a delicate science of preservation. By utilizing advanced, low-temperature dehydration methods, the company ensures that the essential vitamins, enzymes, and vibrant colors of the raw ingredients are retained. This commitment to quality transforms "dried goods" from mere pantry staples into premium, nutrient dense foods. Every product that leaves the Keterfoods facility undergoes rigorous testing to ensure that it meets the highest standards of purity, offering a superior alternative to highly processed or chemically preserved snacks.""")
 
     st.subheader("Affordability")
-    st.write("""
-    Often, the term "premium" in food production implies an exclusive price point, but Keterfoods challenges this paradigm. Affordability is not a concession to quality; rather, it is a deliberate strategic goal. By optimizing production workflows such as the digital transformation of inventory and supply chain management Keterfoods reduces operational waste and streamlines overhead costs. These efficiencies allow the company to offer superior products at a price point that remains accessible to a broader demographic.
-    """)
+    st.write("""Often, the term "premium" in food production implies an exclusive price point, but Keterfoods challenges this paradigm. Affordability is not a concession to quality; rather, it is a deliberate strategic goal. By optimizing production workflows such as the digital transformation of inventory and supply chain management Keterfoods reduces operational waste and streamlines overhead costs. These efficiencies allow the company to offer superior products at a price point that remains accessible to a broader demographic.""")
 
     st.subheader("Vision for the future")
-    st.write("""
-    The vision for Keterfoods extends far beyond current product lines. It is centered on the integration of technology and artisanal craftsmanship. The company looks toward a future where data driven insights ranging from real time climate monitoring in production facilities to AI powered stock forecasting further enhance the efficiency and sustainability of their operations.
+    st.write("""The vision for Keterfoods extends far beyond current product lines. It is centered on the integration of technology and artisanal craftsmanship. The company looks toward a future where data driven insights ranging from real time climate monitoring in production facilities to AI powered stock forecasting further enhance the efficiency and sustainability of their operations.
     Ultimately, Keterfoods is not just selling food; it is building a system that values the consumers well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.""")
 
     # Products Category Grid
@@ -67,7 +64,7 @@ def show_homepage():
     st.markdown("<h2 style='text-align: center;'>OUR <span style='color: #2ecc71;'>PRODUCTS</span></h2>", unsafe_allow_html=True)
     st.write("---")
 
-    col1, col2, col3,col4 = st.columns(4)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         with st.container(border=True):
@@ -92,17 +89,17 @@ def show_homepage():
             if st.button("View Products", key="spices_btn"):
                 st.session_state.page = "spices"
                 st.rerun()
+
     with col4:
         with st.container(border=True):
-            st.markdown("<h4 style='text-align: center;'>PICKLES,CHAPATHI & POORI</h4>", unsafe_allow_html=True)
-            st.write("chapatis and pooris made from whole wheat flour")
+            st.markdown("<h4 style='text-align: center;'>PICKLES, CHAPATHI & POORI</h4>", unsafe_allow_html=True)
+            st.write("Chapatis and pooris made from whole wheat flour.")
             if st.button("View Products", key="OTHER_btn"):
                 st.session_state.page = "OTHER"
                 st.rerun()
-      
 
 
-  def show_vegetables_page():
+def show_vegetables_page():
     nav_col, title_col = st.columns([1, 4])
     with nav_col:
         if st.button("🏠 Home", key="back_veg"):
@@ -113,7 +110,8 @@ def show_homepage():
     st.write("---")
     st.write("Premium selections coming soon.")
 
-  def show_fruits_page():
+
+def show_fruits_page():
     nav_col, title_col = st.columns([1, 4])
     with nav_col:
         if st.button("🏠 Home", key="back_fruit"):
@@ -124,7 +122,8 @@ def show_homepage():
     st.write("---")
     st.write("Premium selections coming soon.")
 
-  def show_spices_page():
+
+def show_spices_page():
     nav_col, title_col = st.columns([1, 4])
     with nav_col:
         if st.button("🏠 Home", key="back_spices"):
@@ -135,7 +134,8 @@ def show_homepage():
     st.write("---")
     st.write("Premium selections coming soon.")
 
-  def show_other_page():
+
+def show_other_page():
     nav_col, title_col = st.columns([1, 4])
     with nav_col:
         if st.button("🏠 Home", key="back_other"):
@@ -146,14 +146,15 @@ def show_homepage():
     st.write("---")
     st.write("Premium selections coming soon.")
 
-  # --- 3. PAGE ROUTER CONTROL ---
-  if st.session_state.page == "home":
+
+# --- 3. PAGE ROUTER CONTROL ---
+if st.session_state.page == "home":
     show_homepage()
-  elif st.session_state.page == "vegetables":
+elif st.session_state.page == "vegetables":
     show_vegetables_page()
-  elif st.session_state.page == "fruits":
+elif st.session_state.page == "fruits":
     show_fruits_page()
-  elif st.session_state.page == "spices":
+elif st.session_state.page == "spices":
     show_spices_page()
-  elif st.session_state.page == "OTHER":
+elif st.session_state.page == "OTHER":
     show_other_page()
