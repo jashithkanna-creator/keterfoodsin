@@ -65,19 +65,25 @@ st.write("---")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    with st.container(border=True):
-        st.markdown("<h4 style='text-align: center;'>DEHYDRATED VEGETABLES</h4>", unsafe_allow_html=True)
-        st.write("Premium vegetables keeping natural nutrients completely intact.")
-        st.button("View Products", key="veg_btn")
+  with st.container(border=True):
+      st.markdown("<h4 style='text-align: center;'>DEHYDRATED VEGETABLES</h4>", unsafe_allow_html=True)
+      st.write("Premium vegetables keeping natural nutrients completely intact.")
+
+      if st.button("View Products", key="veg_btn"):
+          st.session_state.catalog = "vegetables"
 
 with col2:
-    with st.container(border=True):
-        st.markdown("<h4 style='text-align: center;'>DEHYDRATED FRUITS</h4>", unsafe_allow_html=True)
-        st.write("Naturally sweet dehydrated fruits without any added chemical preservatives.")
-        st.button("View Products", key="fruit_btn")
+  with st.container(border=True):
+      st.markdown("<h4 style='text-align: center;'>DEHYDRATED FRUITS</h4>", unsafe_allow_html=True)
+      st.write("Naturally sweet dehydrated fruits without any added chemical preservatives.")
+
+      if st.button("View Products", key="fruit_btn"):
+          st.session_state.catalog = "fruits"
 
 with col3:
-    with st.container(border=True):
-        st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
-        st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
-        st.button("View Products", key="spices_btn")
+  with st.container(border=True):
+      st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
+      st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
+
+      if st.button("View Products", key="spices_btn"):
+          st.session_state.catalog = "spices"
