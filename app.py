@@ -15,55 +15,104 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- Hero Banner Image ---
-# Displays your main hero banner statically without navigation buttons
-st.image("static/images/keter-hero.png", use_container_width=True)
+# --- 1. INITIALIZE NAVIGATION STATE ---
+if "page" not in st.session_state:
+    st.session_state.page = "home"
 
 
-# --- About Us ---
-st.header("About us")
+# --- 2. DEFINE THE PAGES ---
 
-st.subheader("The Keterfoods Philosophy: A Foundation of Excellence")
-st.write("""
-In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a testament to the belief that high-quality, processed food products can be both accessible and reliable. By harmonizing rigorous quality standards with a vision for sustainable growth, Keterfoods is redefining what it means to be a trusted provider in the modern food market.
-""")
+def show_homepage():
+    # Hero Banner Image
+    st.image("static/images/keter-hero.png", use_container_width=True)
 
-st.subheader("Quality and Reliability")
-st.write("""The dehydration process is often misunderstood as a simple reduction of moisture, but for Keterfoods, it is a delicate science of preservation. By utilizing advanced, low-temperature dehydration methods, the company ensures that the essential vitamins, enzymes, and vibrant colors of the raw ingredients are retained. This commitment to quality transforms "dried goods" from mere pantry staples into premium, nutrient-dense foods. Every product that leaves the Keterfoods facility undergoes rigorous testing to ensure that it meets the highest standards of purity, offering a superior alternative to highly processed or chemically preserved snacks.""")
+    # About Us Section
+    st.header("About us")
+    st.subheader("The Keterfoods Philosophy: A Foundation of Excellence")
+    st.write("""
+    In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a testament to the belief that high-quality, processed food products can be both accessible and reliable. By harmonizing rigorous quality standards with a vision for sustainable growth, Keterfoods is redefining what it means to be a trusted provider in the modern food market.
+    """)
 
-st.subheader("Affordability")
-st.write("""
-Often, the term "premium" in food production implies an exclusive price point, but Keterfoods challenges this paradigm. Affordability is not a concession to quality; rather, it is a deliberate strategic goal. By optimizing production workflows—such as the digital transformation of inventory and supply chain management—Keterfoods reduces operational waste and streamlines overhead costs. These efficiencies allow the company to offer superior products at a price point that remains accessible to a broader demographic.
-""")
+    st.subheader("Quality and Reliability")
+    st.write("""The dehydration process is often misunderstood as a simple reduction of moisture, but for Keterfoods, it is a delicate science of preservation. By utilizing advanced, low-temperature dehydration methods, the company ensures that the essential vitamins, enzymes, and vibrant colors of the raw ingredients are retained. This commitment to quality transforms "dried goods" from mere pantry staples into premium, nutrient-dense foods. Every product that leaves the Keterfoods facility undergoes rigorous testing to ensure that it meets the highest standards of purity, offering a superior alternative to highly processed or chemically preserved snacks.""")
 
-st.subheader("Vision for the future")
-st.write("""
-The vision for Keterfoods extends far beyond current product lines. It is centered on the integration of technology and artisanal craftsmanship. The company looks toward a future where data-driven insights—ranging from real-time climate monitoring in production facilities to AI-powered stock forecasting—further enhance the efficiency and sustainability of their operations.
+    st.subheader("Affordability")
+    st.write("""
+    Often, the term "premium" in food production implies an exclusive price point, but Keterfoods challenges this paradigm. Affordability is not a concession to quality; rather, it is a deliberate strategic goal. By optimizing production workflows—such as the digital transformation of inventory and supply chain management—Keterfoods reduces operational waste and streamlines overhead costs. These efficiencies allow the company to offer superior products at a price point that remains accessible to a broader demographic.
+    """)
 
-Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard-bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
-""")
+    st.subheader("Vision for the future")
+    st.write("""
+    The vision for Keterfoods extends far beyond current product lines. It is centered on the integration of technology and artisanal craftsmanship. The company looks toward a future where data-driven insights—ranging from real-time climate monitoring in production facilities to AI-powered stock forecasting—further enhance the efficiency and sustainability of their operations.
 
-# --- Products Section ---
-st.write("<br>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;'>OUR <span style='color: #2ecc71;'>PRODUCTS</span></h2>", unsafe_allow_html=True)
-st.write("---")
+    Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard-bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
+    """)
 
-col1, col2, col3 = st.columns(3)
+    # Products Category Grid
+    st.write("<br>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>OUR <span style='color: #2ecc71;'>PRODUCTS</span></h2>", unsafe_allow_html=True)
+    st.write("---")
 
-with col1:
-    with st.container(border=True):
-        st.markdown("<h4 style='text-align: center;'>DEHYDRATED VEGETABLES</h4>", unsafe_allow_html=True)
-        st.write("Premium vegetables keeping natural nutrients completely intact.")
-        st.button("View Products", key="veg_btn")
+    col1, col2, col3 = st.columns(3)
 
-with col2:
-    with st.container(border=True):
-        st.markdown("<h4 style='text-align: center;'>DEHYDRATED FRUITS</h4>", unsafe_allow_html=True)
-        st.write("Naturally sweet dehydrated fruits without any added chemical preservatives.")
-        st.button("View Products", key="fruit_btn")
+    with col1:
+        with st.container(border=True):
+            st.markdown("<h4 style='text-align: center;'>DEHYDRATED VEGETABLES</h4>", unsafe_allow_html=True)
+            st.write("Premium vegetables keeping natural nutrients completely intact.")
+            if st.button("View Products", key="veg_btn"):
+                st.session_state.page = "vegetables"
+                st.rerun()
 
-with col3:
-    with st.container(border=True):
-        st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
-        st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
-        st.button("View Products", key="spices_btn")
+    with col2:
+        with st.container(border=True):
+            st.markdown("<h4 style='text-align: center;'>DEHYDRATED FRUITS</h4>", unsafe_allow_html=True)
+            st.write("Naturally sweet dehydrated fruits without any added chemical preservatives.")
+            if st.button("View Products", key="fruit_btn"):
+                st.session_state.page = "fruits"
+                st.rerun()
+
+    with col3:
+        with st.container(border=True):
+            st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
+            st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
+            if st.button("View Products", key="spices_btn"):
+                st.session_state.page = "spices"
+                st.rerun()
+
+
+def show_vegetables_page():
+    if st.button("⬅️ Back to Homepage", key="back_veg"):
+        st.session_state.page = "home"
+        st.rerun()
+    st.title("🧅 Dehydrated Vegetables Catalog")
+    st.write("---")
+    st.write("Premium selections coming soon.")
+
+
+def show_fruits_page():
+    if st.button("⬅️ Back to Homepage", key="back_fruit"):
+        st.session_state.page = "home"
+        st.rerun()
+    st.title("🍓 Dehydrated Fruits Catalog")
+    st.write("---")
+    st.write("Premium selections coming soon.")
+
+
+def show_spices_page():
+    if st.button("⬅️ Back to Homepage", key="back_spices"):
+        st.session_state.page = "home"
+        st.rerun()
+    st.title("🌶️ Spices & Aromatic Powders Catalog")
+    st.write("---")
+    st.write("Premium selections coming soon.")
+
+
+# --- 3. PAGE ROUTER CONTROL ---
+if st.session_state.page == "home":
+    show_homepage()
+elif st.session_state.page == "vegetables":
+    show_vegetables_page()
+elif st.session_state.page == "fruits":
+    show_fruits_page()
+elif st.session_state.page == "spices":
+    show_spices_page()
