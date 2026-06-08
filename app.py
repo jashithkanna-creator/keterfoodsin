@@ -87,3 +87,57 @@ with col3:
 
       if st.button("View Products", key="spices_btn"):
           st.session_state.catalog = "spices"
+  st.write("---")
+
+  if st.session_state.catalog == "vegetables":
+        st.header("Dehydrated Vegetables Catalogue")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.image("static/images/onion.jpeg")
+            st.subheader("Dehydrated Onion")
+
+        with col2:
+            st.image("static/images/tomato.jpeg")
+            st.subheader("Dehydrated Tomato")
+
+        with col3:
+            st.image("static/images/carrot.jpeg")
+            st.subheader("Dehydrated Carrot")
+
+
+  elif st.session_state.catalog == "fruits":
+        st.header("Dehydrated Fruits Catalogue")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.image("static/images/mango.jpeg")
+            st.subheader("Dehydrated Mango")
+
+        with col2:
+            st.image("static/images/banana.jpeg")
+            st.subheader("Dehydrated Banana")
+
+        with col3:
+            st.image("static/images/pineapple.jpeg")
+            st.subheader("Dehydrated Pineapple")
+
+
+  elif st.session_state.catalog == "spices":
+        st.header("Spices & Powders Catalogue")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.image("static/images/tamarind-powder.jpeg")
+            st.subheader("Tamarind Powder")
+
+        with col2:
+            st.image("static/images/chilli-powder.jpeg")
+            st.subheader("Chilli Powder")
+
+        with col3:
+            st.image("static/images/ginger-powder.jpeg")
+            st.subheader("Ginger Powder")
