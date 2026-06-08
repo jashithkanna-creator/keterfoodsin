@@ -1,11 +1,23 @@
 import streamlit as st
-
 # --- 0. PAGE CONFIG & STYLING ---
 st.set_page_config(layout="wide")
-
 st.markdown("""
 <style>
-/* Style the navigation buttons to look like a modern navbar block */
+/* 1. Force hide the native header elements */
+header[data-testid="stHeader"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0px !important;
+}
+
+/* 2. Force the main page container down so the Home button is fully visible */
+.stMainBlockContainer, .block-container {
+    padding-top: 6rem !important;
+    padding-bottom: 2rem !important;
+    max-width: 95% !important;
+}
+
+/* 3. Style the navigation buttons to look like a modern navbar block */
 div.stButton > button:first-child {
     background-color: #ffffff;
     color: #2c3e50;
@@ -21,13 +33,10 @@ div.stButton > button:first-child:hover {
     color: #2ecc71;
     background-color: #fafffa;
 }
+
+/* 4. General page background */
 .stApp {
     background-color: #FDFBF7;
-}
-.block-container {
-    padding-top: 1rem;
-    padding-bottom: 2rem;
-    max-width: 95% !important;
 }
 </style>
 """, unsafe_allow_html=True)
