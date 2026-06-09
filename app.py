@@ -27,60 +27,35 @@ div.stButton > button:first-child:hover {
     padding-bottom: 2rem;
     max-width: 95% !important;
 }
-
-/* Pure CSS Slideshow Frame - Avoids Server-side Reload Loops */
-.slideshow-box {
-    position: relative;
-    width: 100%;
-    height: 420px;
-    overflow: hidden;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-.slideshow-box img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    animation: fadeAnimation 25s infinite ease-in-out;
-}
-/* Individual delay intervals for a 5-image rotation cycle */
-.slideshow-box img:nth-child(1) { animation-delay: 0s; }
-.slideshow-box img:nth-child(2) { animation-delay: 5s; }
-.slideshow-box img:nth-child(3) { animation-delay: 10s; }
-.slideshow-box img:nth-child(4) { animation-delay: 15s; }
-.slideshow-box img:nth-child(5) { animation-delay: 20s; }
-
-@keyframes fadeAnimation {
-    0% { opacity: 0; }
-    4% { opacity: 1; }
-    20% { opacity: 1; }
-    24% { opacity: 0; }
-    100% { opacity: 0; }
-}
 </style>
 """, unsafe_allow_html=True)
 
 # --- 1. INITIALIZE NAVIGATION STATE ---
 if "page" not in st.session_state:
     st.session_state.page = "home"
+if "slide_index" not in st.session_state:
+    st.session_state.slide_index = 0
 
 
 # --- 2. DEFINE THE PAGES ---
 
+# Clean isolated fragment loop
+@st.fragment(run_every=5)
+def render_slideshow():
+    homepage_slides = [
+        "static/images/keter-hero.png",
+        "static/images/dried-vegetables.jpeg",
+        "static/images/dehydrated-fruits.jpeg",
+        "static/images/product-spice.png",
+        "static/images/tamarind-powder.jpeg"
+    ]
+    st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
+    st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
+
+
 def show_homepage():
-    # Render-safe pure HTML/CSS carousel leveraging base64 fallback-proof routing
-    st.markdown("""
-    <div class="slideshow-box">
-        <img src="static/images/keter-hero.png">
-        <img src="static/images/dried-vegetables.jpeg">
-        <img src="static/images/dehydrated-fruits.jpeg">
-        <img src="static/images/product-spice.png">
-        <img src="static/images/tamarind-powder.jpeg">
-    </div>
-    """, unsafe_allow_html=True)
+    # Show the slideshow strictly here on the homepage
+    render_slideshow()
 
     # About Us Section
     st.header("About us")
@@ -190,7 +165,8 @@ def show_other_page():
     st.write("Premium selections coming soon.")
 
 
-# --- 3. PAGE ROUTER CONTROL ---
+# --- 3. MAIN ROUTER SYSTEM ---
+# By separating router control completely, the subpages load perfectly and fully.
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
