@@ -1,8 +1,10 @@
 import streamlit as st
+import streamlit.components.v1 as components
+import base64
 
 st.set_page_config(layout="wide")
 
-# --- 1. PERFECTED LAYOUT & CAROUSEL ANIMATION ---
+# --- 1. CLEAN APP CONTAINER STYLING ---
 st.markdown("""
 <style>
 /* Style the navigation buttons to look like a modern navbar block */
@@ -24,49 +26,23 @@ div.stButton > button:first-child:hover {
 .stApp {
     background-color: #FDFBF7;
 }
-/* Safe padding to completely prevent top-clipping on iPad/mobile browsers */
+/* Safe padding setting to eliminate iPad browser interface clipping */
 .block-container {
-    padding-top: 4.5rem !important;
+    padding-top: 4rem !important;
     padding-bottom: 2rem;
     max-width: 95% !important;
 }
-
-/* Browser-side CSS Slideshow Frame - 0% Server CPU overhead, No subpage glitches */
-.render-slideshow-container {
-    position: relative;
-    width: 100%;
-    height: 400px;
-    overflow: hidden;
-    border-radius: 12px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-    background-color: #eaeaea;
-}
-.render-slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    animation: renderCarouselKeyframes 20s infinite ease-in-out;
-}
-/* Individual delay timings for a seamless 4-second crossfade loop */
-.rs-1 { background-image: url('app/static/images/keter-hero.png'); animation-delay: 0s; }
-.rs-2 { background-image: url('app/static/images/dried-vegetables.jpeg'); animation-delay: 4s; }
-.rs-3 { background-image: url('app/static/images/dehydrated-fruits.jpeg'); animation-delay: 8s; }
-.rs-4 { background-image: url('app/static/images/product-spice.png'); animation-delay: 12s; }
-.rs-5 { background-image: url('app/static/images/tamarind-powder.jpeg'); animation-delay: 16s; }
-
-@keyframes renderCarouselKeyframes {
-    0% { opacity: 0; }
-    4% { opacity: 1; }
-    20% { opacity: 1; }
-    24% { opacity: 0; }
-    100% { opacity: 0; }
-}
 </style>
 """, unsafe_allow_html=True)
+
+# Helper function to convert local disk paths to fail-safe inline base64 assets
+def load_base64_img(path):
+    try:
+        with open(path, "rb") as f:
+            return f"data:image/jpeg;base64,{base64.b64encode(f.read()).decode()}"
+    except Exception:
+        # Fallback empty structural assignment if paths misalign
+        return ""
 
 # --- 2. INITIALIZE NAVIGATION STATE ---
 if "page" not in st.session_state:
@@ -76,16 +52,37 @@ if "page" not in st.session_state:
 # --- 3. DEFINE THE PAGES ---
 
 def show_homepage():
-    # Injecting the pure CSS carousel. It handles cycling natively in the browser window
-    st.markdown("""
-    <div class="render-slideshow-container">
-        <div class="render-slide rs-1"></div>
-        <div class="render-slide rs-2"></div>
-        <div class="render-slide rs-3"></div>
-        <div class="render-slide rs-4"></div>
-        <div class="render-slide rs-5"></div>
+    # Convert all 5 static image assets securely to inline data links
+    img1 = load_base64_img("static/images/keter-hero.png")
+    img2 = load_base64_img("static/images/dried-vegetables.jpeg")
+    img3 = load_base64_img("static/images/dehydrated-fruits.jpeg")
+    img4 = load_base64_img("static/images/product-spice.png")
+    img5 = load_base64_img("static/images/tamarind-powder.jpeg")
+
+    # Sandbox HTML Slider Component code
+    html_carousel_code = f"""
+    <div id="slider" style="position: relative; width: 100%; height: 400px; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <img class="slide" src="{img1}" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 1; transition: opacity 1s ease-in-out;">
+        <img class="slide" src="{img2}" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out;">
+        <img class="slide" src="{img3}" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out;">
+        <img class="slide" src="{img4}" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out;">
+        <img class="slide" src="{img5}" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out;">
     </div>
-    """, unsafe_allow_html=True)
+
+    <script>
+        let currentIdx = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        setInterval(() => {{
+            slides[currentIdx].style.opacity = 0;
+            currentIdx = (currentIdx + 1) % slides.length;
+            slides[currentIdx].style.opacity = 1;
+        }}, 4000); // Transitions automatically every 4 seconds cleanly inside the user's browser
+    </script>
+    """
+
+    # Render slideshow element safely
+    components.html(html_carousel_code, height=420)
 
     # About Us Section
     st.header("About us")
@@ -190,7 +187,7 @@ def show_other_page():
     st.write("Premium selections coming soon.")
 
 
-# --- 4. CLEAN PAGE ROUTER CONTROL ---
+# --- 4. SECURE CONDITIONAL PAGE SYSTEM ---
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
