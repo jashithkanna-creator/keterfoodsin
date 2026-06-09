@@ -1,6 +1,6 @@
 import streamlit as st
-import threading
-import time
+import base64
+import os
 
 st.set_page_config(layout="wide")
 st.markdown("""
@@ -29,60 +29,90 @@ div.stButton > button:first-child:hover {
     padding-bottom: 2rem;
     max-width: 95% !important;
 }
+
+/* Perfect Client-Side CSS Slideshow Frame - Absolutely Zero Server Reruns */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.carousel-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: slideCycle 25s infinite ease-in-out;
+}
+.slide1 { animation-delay: 0s; }
+.slide2 { animation-delay: 5s; }
+.slide3 { animation-delay: 10s; }
+.slide4 { animation-delay: 15s; }
+.slide5 { animation-delay: 20s; }
+
+@keyframes slideCycle {
+    0% { opacity: 0; }
+    4% { opacity: 1; }
+    20% { opacity: 1; }
+    24% { opacity: 0; }
+    100% { opacity: 0; }
+}
 </style>
 """, unsafe_allow_html=True)
+
+# Helper function to cleanly convert local files to Render-safe HTML strings
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except Exception:
+        return ""
 
 # --- 1. INITIALIZE NAVIGATION STATE ---
 if "page" not in st.session_state:
     st.session_state.page = "home"
-if "slide_index" not in st.session_state:
-    st.session_state.slide_index = 0
-
-homepage_slides = [
-    "static/images/keter-hero.png",
-    "static/images/dried-vegetables.jpeg",
-    "static/images/dehydrated-fruits.jpeg",
-    "static/images/product-spice.png",
-    "static/images/tamarind-powder.jpeg"
-]
-
-# --- 2. ISOLATED BACKGROUND THREAD FOR SLIDESHOW ---
-def auto_rotate_slides():
-    time.sleep(5)
-    # Only cycle and request a rerun if the user is actively on the homepage
-    if st.session_state.page == "home":
-        st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
-        st.rerun()
 
 
-# --- 3. DEFINE THE PAGES ---
+# --- 2. DEFINE THE PAGES ---
 
 def show_homepage():
-    # Start the parallel timer thread cleanly
-    threading.Thread(target=auto_rotate_slides, daemon=True).start()
+    # Pre-encode all 5 images into memory for rendering stability
+    img1 = get_base64_image("static/images/keter-hero.png")
+    img2 = get_base64_image("static/images/dried-vegetables.jpeg")
+    img3 = get_base64_image("static/images/dehydrated-fruits.jpeg")
+    img4 = get_base64_image("static/images/product-spice.png")
+    img5 = get_base64_image("static/images/tamarind-powder.jpeg")
 
-    # Display current slideshow banner natively
-    st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
+    # Render CSS slideshow using memory strings
+    st.markdown(f"""
+    <div class="carousel-container">
+        <div class="carousel-slide slide1" style="background-image: url('data:image/png;base64,{img1}');"></div>
+        <div class="carousel-slide slide2" style="background-image: url('data:image/jpeg;base64,{img2}');"></div>
+        <div class="carousel-slide slide3" style="background-image: url('data:image/jpeg;base64,{img3}');"></div>
+        <div class="carousel-slide slide4" style="background-image: url('data:image/png;base64,{img4}');"></div>
+        <div class="carousel-slide slide5" style="background-image: url('data:image/jpeg;base64,{img5}');"></div>
+    </div>
+    """, unsafe_allow_html=True)
 
     # About Us Section
     st.header("About us")
     st.subheader("The Keterfoods Philosophy: A Foundation of Excellence")
-    st.write("""In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a testament to the belief that high quality, processed food products can be both accessible and reliable. By harmonizing rigorous quality standards with a vision for sustainable growth, Keterfoods is redefining what it means to be a trusted provider in the modern food market.
-    """)
+    st.write("""In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a testament to the belief that high quality, processed food products can be both accessible and reliable. By harmonizing rigorous quality standards with a vision for sustainable growth, Keterfoods is redefining what it means to be a trusted provider in the modern food market.""")
 
     st.subheader("Quality and Reliability")
     st.write("""The dehydration process is often misunderstood as a simple reduction of moisture, but for Keterfoods, it is a delicate science of preservation. By utilizing advanced, low-temperature dehydration methods, the company ensures that the essential vitamins, enzymes, and vibrant colors of the raw ingredients are retained. This commitment to quality transforms "dried goods" from mere pantry staples into premium, nutrient dense foods. Every product that leaves the Keterfoods facility undergoes rigorous testing to ensure that it meets the highest standards of purity, offering a superior alternative to highly processed or chemically preserved snacks.""")
 
     st.subheader("Affordability")
-    st.write("""
-    Often, the term "premium" in food production implies an exclusive price point, but Keterfoods challenges this paradigm. Affordability is not a concession to quality; rather, it is a deliberate strategic goal. By optimizing production workflows such as the digital transformation of inventory and supply chain management Keterfoods reduces operational waste and streamlines overhead costs. These efficiencies allow the company to offer superior products at a price point that remains accessible to a broader demographic.
-    """)
+    st.write("""Often, the term "premium" in food production implies an exclusive price point, but Keterfoods challenges this paradigm. Affordability is not a concession to quality; rather, it is a deliberate strategic goal. By optimizing production workflows such as the digital transformation of inventory and supply chain management Keterfoods reduces operational waste and streamlines overhead costs. These efficiencies allow the company to offer superior products at a price point that remains accessible to a broader demographic.""")
 
     st.subheader("Vision for the future")
-    st.write("""
-    The vision for Keterfoods extends far beyond current product lines. It is centered on the integration of technology and artisanal craftsmanship. The company looks toward a future where data driven insights ranging from real time climate monitoring in production facilities to AI powered stock forecasting further enhance the efficiency and sustainability of their operations.
-    Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
-    """)
+    st.write("""The vision for Keterfoods extends far beyond current product lines. It is centered on the integration of technology and artisanal craftsmanship. The company looks toward a future where data driven insights ranging from real time climate monitoring in production facilities to AI powered stock forecasting further enhance the efficiency and sustainability of their operations.
+    Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.""")
 
     # Products Category Grid
     st.write("<br>", unsafe_allow_html=True)
@@ -110,7 +140,7 @@ def show_homepage():
     with col3:
         with st.container(border=True):
             st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
-            st.write("Finely processed aromatic dehydrated whole spices and vegetable powder.")
+            st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
             if st.button("View Products", key="spices_btn"):
                 st.session_state.page = "spices"
                 st.rerun()
@@ -133,6 +163,7 @@ def show_vegetables_page():
     with title_col:
         st.markdown("<h2 style='margin:0; padding:0;'>🧅 Dehydrated Vegetables</h2>", unsafe_allow_html=True)
     st.write("---")
+    st.write("Premium selections coming soon.")
 
 
 def show_fruits_page():
@@ -144,6 +175,7 @@ def show_fruits_page():
     with title_col:
         st.markdown("<h2 style='margin:0; padding:0;'>🍓 Dehydrated Fruits</h2>", unsafe_allow_html=True)
     st.write("---")
+    st.write("Premium selections coming soon.")
 
 
 def show_spices_page():
@@ -155,6 +187,7 @@ def show_spices_page():
     with title_col:
         st.markdown("<h2 style='margin:0; padding:0;'>🌶️ Spices & Powders</h2>", unsafe_allow_html=True)
     st.write("---")
+    st.write("Premium selections coming soon.")
 
 
 def show_other_page():
@@ -164,11 +197,12 @@ def show_other_page():
             st.session_state.page = "home"
             st.rerun()
     with title_col:
-        st.markdown("<h2 style='margin:0; padding:0;'> Pickles, Chapathi & Poori</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='margin:0; padding:0;'>🥞 Pickles, Chapathi & Poori</h2>", unsafe_allow_html=True)
     st.write("---")
+    st.write("Premium selections coming soon.")
 
 
-# --- 4. PAGE ROUTER CONTROL ---
+# --- 3. CLEAN PAGE ROUTER CONTROL ---
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
