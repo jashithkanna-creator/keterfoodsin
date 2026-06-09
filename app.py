@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(layout="wide")
 
-# --- 1. CSS LAYOUT SPECIFICATION ---
+# --- 1. PERFECTED LAYOUT & CAROUSEL ANIMATION ---
 st.markdown("""
 <style>
 /* Style the navigation buttons to look like a modern navbar block */
@@ -24,11 +24,46 @@ div.stButton > button:first-child:hover {
 .stApp {
     background-color: #FDFBF7;
 }
-/* Increased padding-top to keep content completely safe from top-clipping */
+/* Safe padding to completely prevent top-clipping on iPad/mobile browsers */
 .block-container {
     padding-top: 4.5rem !important;
     padding-bottom: 2rem;
     max-width: 95% !important;
+}
+
+/* Browser-side CSS Slideshow Frame - 0% Server CPU overhead, No subpage glitches */
+.render-slideshow-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    background-color: #eaeaea;
+}
+.render-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: renderCarouselKeyframes 20s infinite ease-in-out;
+}
+/* Individual delay timings for a seamless 4-second crossfade loop */
+.rs-1 { background-image: url('app/static/images/keter-hero.png'); animation-delay: 0s; }
+.rs-2 { background-image: url('app/static/images/dried-vegetables.jpeg'); animation-delay: 4s; }
+.rs-3 { background-image: url('app/static/images/dehydrated-fruits.jpeg'); animation-delay: 8s; }
+.rs-4 { background-image: url('app/static/images/product-spice.png'); animation-delay: 12s; }
+.rs-5 { background-image: url('app/static/images/tamarind-powder.jpeg'); animation-delay: 16s; }
+
+@keyframes renderCarouselKeyframes {
+    0% { opacity: 0; }
+    4% { opacity: 1; }
+    20% { opacity: 1; }
+    24% { opacity: 0; }
+    100% { opacity: 0; }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -41,8 +76,16 @@ if "page" not in st.session_state:
 # --- 3. DEFINE THE PAGES ---
 
 def show_homepage():
-    # Direct, single image display to ensure no background threads interrupt routing
-    st.image("static/images/keter-hero.png", use_container_width=True)
+    # Injecting the pure CSS carousel. It handles cycling natively in the browser window
+    st.markdown("""
+    <div class="render-slideshow-container">
+        <div class="render-slide rs-1"></div>
+        <div class="render-slide rs-2"></div>
+        <div class="render-slide rs-3"></div>
+        <div class="render-slide rs-4"></div>
+        <div class="render-slide rs-5"></div>
+    </div>
+    """, unsafe_allow_html=True)
 
     # About Us Section
     st.header("About us")
@@ -147,7 +190,7 @@ def show_other_page():
     st.write("Premium selections coming soon.")
 
 
-# --- 4. RELIABLE ROUTER CONTROL SYSTEM ---
+# --- 4. CLEAN PAGE ROUTER CONTROL ---
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
