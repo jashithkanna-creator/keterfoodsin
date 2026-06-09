@@ -1,163 +1,179 @@
+      import streamlit as st
+      import time
 
-import streamlit as st
+      st.set_page_config(layout="wide")
+      st.markdown("""
+      <style>
+      /* Style the navigation buttons to look like a modern navbar block */
+      div.stButton > button:first-child {
+          background-color: #ffffff;
+          color: #2c3e50;
+          border: 1px solid #e0e0e0;
+          padding: 10px 24px;
+          font-weight: 600;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+          transition: all 0.3s ease;
+      }
+      div.stButton > button:first-child:hover {
+          border-color: #2ecc71;
+          color: #2ecc71;
+          background-color: #fafffa;
+      }
+      .stApp {
+          background-color: #FDFBF7;
+      }
+      .block-container {
+          padding-top: 1rem;
+          padding-bottom: 2rem;
+          max-width: 95% !important;
+      }
+      </style>
+      """, unsafe_allow_html=True)
 
-# Set page configuration to make it wide and match modern layouts
-st.set_page_config(page_title="Keterfoods", layout="wide")
-
-# Initialize session state for page routing if it doesn't exist
-if "page" not in st.session_state:
-    st.session_state.page = "home"
-
-# Custom CSS styling (includes your off-white look and the slideshow animations)
-st.markdown("""
-<style>
-    .main { background-color: #FDFBF7; color: #2c3e50; }
-    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.75rem; margin-top: 1.5rem; margin-bottom: 1rem; }
-    h4 { font-size: 1.1rem; font-weight: 600; text-align: center; margin: 0; }
-    p { margin-bottom: 1.5rem; color: #34495e; }
-
-    /* Border Container Boxes for Categories */
-    .category-box {
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 20px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    /* CSS Slideshow Container */
-    .slideshow-container {
-        position: relative;
-        width: 100%;
-        height: 400px;
-        overflow: hidden;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-
-    .slideshow-container img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        animation: slideFade 25s infinite;
-    }
-
-    /* Animation timings for the 5 banner images (5 seconds per image) */
-    .slideshow-container img:nth-child(1) { animation-delay: 0s; }
-    .slideshow-container img:nth-child(2) { animation-delay: 5s; }
-    .slideshow-container img:nth-child(3) { animation-delay: 10s; }
-    .slideshow-container img:nth-child(4) { animation-delay: 15s; }
-    .slideshow-container img:nth-child(5) { animation-delay: 20s; }
-
-    @keyframes slideFade {
-        0% { opacity: 0; }
-        4% { opacity: 1; }
-        20% { opacity: 1; }
-        24% { opacity: 0; }
-        100% { opacity: 0; }
-    }
-</style>
-""", unsafe_allow_html=True)
+      # --- 1. INITIALIZE NAVIGATION STATE ---
+      if "page" not in st.session_state:
+          st.session_state.page = "home"
+      if "slide_index" not in st.session_state:
+          st.session_state.slide_index = 0
 
 
-# =========================================================
-# 1. HOME PAGE FUNCTION
-# =========================================================
-def show_homepage():
-    # Integrated HTML Slideshow containing all 5 of your project images
-    st.markdown("""
-    <div class="slideshow-container">
-        <img src="app/static/images/keter-hero.png">
-        <img src="app/static/images/dried-vegetables.jpeg">
-        <img src="app/static/images/dehydrated-fruits.jpeg">
-        <img src="app/static/images/product-spice.png">
-        <img src="app/static/images/tamarind-powder.jpeg">
-    </div>
-    """, unsafe_allow_html=True)
+      # --- 2. DEFINE THE PAGES ---
 
-    # About Us Section
-    st.header("About us")
-    st.subheader("The Keterfoods Philosophy: A Foundation of Excellence")
-    st.write("""In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a beacon of quality, anchoring its methodologies in rigorous safety frameworks and sustainable practices. We believe that true culinary value stems from clean processing, direct transparent relationships with our farmers, and an unyielding commitment to delivering absolute freshness to consumers.""")
+      def show_homepage():
+          # Native, render-safe slideshow tracking loop using your 5 exact folder images
+          homepage_slides = [
+              "static/images/keter-hero.png",
+              "static/images/dried-vegetables.jpeg",
+              "static/images/dehydrated-fruits.jpeg",
+              "static/images/product-spice.png",
+              "static/images/tamarind-powder.jpeg"
+          ]
 
-    st.markdown("<br><h2 style='text-align: center;'>OUR <span style='color: #2ecc71;'>PRODUCTS</span></h2>", unsafe_allow_html=True)
+          # Display the current slide image safely
+          st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
 
-    # The 4-Column Category Grid
-    col1, col2, col3, col4 = st.columns(4)
+          # About Us Section
+          st.header("About us")
+          st.subheader("The Keterfoods Philosophy: A Foundation of Excellence")
+          st.write("""In the competitive landscape of artisanal food production, the success of a brand is measured not merely by its reach, but by the integrity of its core pillars. Keterfoods stands as a testament to the belief that high quality, processed food products can be both accessible and reliable. By harmonizing rigorous quality standards with a vision for sustainable growth, Keterfoods is redefining what it means to be a trusted provider in the modern food market.
+          """)
 
-    with col1:
-        st.markdown("<div class='category-box'><h4>VEGETABLES</h4><p style='font-size:14px;'>Naturally grown, expertly sliced, and dehydrated vegetables keeping core nutrients preserved.</p></div>", unsafe_allow_html=True)
-        if st.button("View Products", key="btn_veg", use_container_width=True):
-            st.session_state.page = "vegetables"
-            st.rerun()
+          st.subheader("Quality and Reliability")
+          st.write("""The dehydration process is often misunderstood as a simple reduction of moisture, but for Keterfoods, it is a delicate science of preservation. By utilizing advanced, low-temperature dehydration methods, the company ensures that the essential vitamins, enzymes, and vibrant colors of the raw ingredients are retained. This commitment to quality transforms "dried goods" from mere pantry staples into premium, nutrient dense foods. Every product that leaves the Keterfoods facility undergoes rigorous testing to ensure that it meets the highest standards of purity, offering a superior alternative to highly processed or chemically preserved snacks.""")
 
-    with col2:
-        st.markdown("<div class='category-box'><h4>FRUITS</h4><p style='font-size:14px;'>Sweet and tangy premium dehydrated fruit slices perfect for healthy snacking and baking.</p></div>", unsafe_allow_html=True)
-        if st.button("View Products", key="btn_fruit", use_container_width=True):
-            st.session_state.page = "fruits"
-            st.rerun()
+          st.subheader("Affordability")
+          st.write("""
+          Often, the term "premium" in food production implies an exclusive price point, but Keterfoods challenges this paradigm. Affordability is not a concession to quality; rather, it is a deliberate strategic goal. By optimizing production workflows such as the digital transformation of inventory and supply chain management Keterfoods reduces operational waste and streamlines overhead costs. These efficiencies allow the company to offer superior products at a price point that remains accessible to a broader demographic.
+          """)
 
-    with col3:
-        st.markdown("<div class='category-box'><h4>SPICES & POWDERS</h4><p style='font-size:14px;'>Finely processed aromatic dehydrated whole spices and herbal blends.</p></div>", unsafe_allow_html=True)
-        if st.button("View Products", key="btn_spices", use_container_width=True):
-            st.session_state.page = "spices"
-            st.rerun()
+          st.subheader("Vision for the future")
+          st.write("""
+          The vision for Keterfoods extends far beyond current product lines. It is centered on the integration of technology and artisanal craftsmanship. The company looks toward a future where data driven insights ranging from real time climate monitoring in production facilities to AI powered stock forecasting further enhance the efficiency and sustainability of their operations.
+          Ultimately, Keterfoods is not just selling food; it is building a system that values the consumer's well-being. By maintaining a balance between the precision of technology and the care of traditional methods, the company aims to become a standard bearer for how modern food enterprises should operate: with quality at the forefront, reliability in every package, and affordability at the core of its mission.
+          """)
 
-    with col4:
-        st.markdown("<div class='category-box'><h4>PICKLES & OTHER</h4><p style='font-size:14px;'>Chapatis and pooris made from whole wheat flour alongside delicious traditional items.</p></div>", unsafe_allow_html=True)
-        if st.button("View Products", key="btn_other", use_container_width=True):
-            st.session_state.page = "other"
-            st.rerun()
+          # Products Category Grid
+          st.write("<br>", unsafe_allow_html=True)
+          st.markdown("<h2 style='text-align: center;'>OUR <span style='color: #2ecc71;'>PRODUCTS</span></h2>", unsafe_allow_html=True)
+          st.write("---")
 
+          col1, col2, col3, col4 = st.columns(4)
 
-# =========================================================
-# 2. SUB-PAGE FUNCTIONS
-# =========================================================
-def show_vegetables_page():
-    if st.button("🏠 Home", key="back_veg"):
-        st.session_state.page = "home"
-        st.rerun()
-    st.markdown("## 🧅 Dehydrated Vegetables")
-    st.write("Vegetables catalog details coming soon.")
+          with col1:
+              with st.container(border=True):
+                  st.markdown("<h4 style='text-align: center;'>DEHYDRATED VEGETABLES</h4>", unsafe_allow_html=True)
+                  st.write("Premium vegetables keeping natural nutrients completely intact.")
+                  if st.button("View Products", key="veg_btn"):
+                      st.session_state.page = "vegetables"
+                      st.rerun()
 
-def show_fruits_page():
-    if st.button("🏠 Home", key="back_fruit"):
-        st.session_state.page = "home"
-        st.rerun()
-    st.markdown("## 🍓 Dehydrated Fruits")
-    st.write("Fruit catalog details coming soon.")
+          with col2:
+              with st.container(border=True):
+                  st.markdown("<h4 style='text-align: center;'>DEHYDRATED FRUITS</h4>", unsafe_allow_html=True)
+                  st.write("Naturally sweet dehydrated fruits without any added chemical preservatives.")
+                  if st.button("View Products", key="fruit_btn"):
+                      st.session_state.page = "fruits"
+                      st.rerun()
 
-def show_spices_page():
-    if st.button("🏠 Home", key="back_spices"):
-        st.session_state.page = "home"
-        st.rerun()
-    st.markdown("## 🌶️ Spices & Powders")
-    st.write("Spices catalog details coming soon.")
+          with col3:
+              with st.container(border=True):
+                  st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
+                  st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
+                  if st.button("View Products", key="spices_btn"):
+                      st.session_state.page = "spices"
+                      st.rerun()
 
-def show_other_page():
-    if st.button("🏠 Home", key="back_other"):
-        st.session_state.page = "home"
-        st.rerun()
-    st.markdown("## 🥞 Pickles, Chapathi & Poori")
-    st.write("Pickles and bakery inventory coming soon.")
+          with col4:
+              with st.container(border=True):
+                  st.markdown("<h4 style='text-align: center;'>PICKLES,CHAPATHI & POORI</h4>", unsafe_allow_html=True)
+                  st.write("chapatis and pooris made from whole wheat flour")
+                  if st.button("View Products", key="OTHER_btn"):
+                      st.session_state.page = "OTHER"
+                      st.rerun()
+
+          # Automatically switches slide background data parameters safely every 6 seconds
+          time.sleep(6)
+          st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
+          st.rerun()
 
 
-# =========================================================
-# 3. ROUTING ROUTER SYSTEM
-# =========================================================
-if st.session_state.page == "home":
-    show_homepage()
-elif st.session_state.page == "vegetables":
-    show_vegetables_page()
-elif st.session_state.page == "fruits":
-    show_fruits_page()
-elif st.session_state.page == "spices":
-    show_spices_page()
-elif st.session_state.page == "other":
-    show_other_page()
+      def show_vegetables_page():
+          nav_col, title_col = st.columns([1, 4])
+          with nav_col:
+              if st.button("🏠 Home", key="back_veg"):
+                  st.session_state.page = "home"
+                  st.rerun()
+          with title_col:
+              st.markdown("<h2 style='margin:0; padding:0;'>🧅 Dehydrated Vegetables</h2>", unsafe_allow_html=True)
+          st.write("---")
+          st.write("Premium selections coming soon.")
+
+
+      def show_fruits_page():
+          nav_col, title_col = st.columns([1, 4])
+          with nav_col:
+              if st.button("🏠 Home", key="back_fruit"):
+                  st.session_state.page = "home"
+                  st.rerun()
+          with title_col:
+              st.markdown("<h2 style='margin:0; padding:0;'>🍓 Dehydrated Fruits</h2>", unsafe_allow_html=True)
+          st.write("---")
+          st.write("Premium selections coming soon.")
+
+
+      def show_spices_page():
+          nav_col, title_col = st.columns([1, 4])
+          with nav_col:
+              if st.button("🏠 Home", key="back_spices"):
+                  st.session_state.page = "home"
+                  st.rerun()
+          with title_col:
+              st.markdown("<h2 style='margin:0; padding:0;'>🌶️ Spices & Powders</h2>", unsafe_allow_html=True)
+          st.write("---")
+          st.write("Premium selections coming soon.")
+
+
+      def show_other_page():
+          nav_col, title_col = st.columns([1, 4])
+          with nav_col:
+              if st.button("🏠 Home", key="back_other"):
+                  st.session_state.page = "home"
+                  st.rerun()
+          with title_col:
+              st.markdown("<h2 style='margin:0; padding:0;'>🥞 Pickles, Chapathi & Poori</h2>", unsafe_allow_html=True)
+          st.write("---")
+          st.write("Premium selections coming soon.")
+
+
+      # --- 3. PAGE ROUTER CONTROL ---
+      if st.session_state.page == "home":
+          show_homepage()
+      elif st.session_state.page == "vegetables":
+          show_vegetables_page()
+      elif st.session_state.page == "fruits":
+          show_fruits_page()
+      elif st.session_state.page == "spices":
+          show_spices_page()
+      elif st.session_state.page == "OTHER":
+          show_other_page()
