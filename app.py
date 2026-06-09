@@ -1,4 +1,5 @@
 import streamlit as st
+import threading
 import time
 
 st.set_page_config(layout="wide")
@@ -37,19 +38,30 @@ if "page" not in st.session_state:
 if "slide_index" not in st.session_state:
     st.session_state.slide_index = 0
 
+homepage_slides = [
+    "static/images/keter-hero.png",
+    "static/images/dried-vegetables.jpeg",
+    "static/images/dehydrated-fruits.jpeg",
+    "static/images/product-spice.png",
+    "static/images/tamarind-powder.jpeg"
+]
 
-# --- 2. DEFINE THE PAGES ---
+# --- 2. ISOLATED BACKGROUND THREAD FOR SLIDESHOW ---
+def auto_rotate_slides():
+    time.sleep(5)
+    # Only cycle and request a rerun if the user is actively on the homepage
+    if st.session_state.page == "home":
+        st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
+        st.rerun()
+
+
+# --- 3. DEFINE THE PAGES ---
 
 def show_homepage():
-    homepage_slides = [
-        "static/images/keter-hero.png",
-        "static/images/dried-vegetables.jpeg",
-        "static/images/dehydrated-fruits.jpeg",
-        "static/images/product-spice.png",
-        "static/images/tamarind-powder.jpeg"
-    ]
+    # Start the parallel timer thread cleanly
+    threading.Thread(target=auto_rotate_slides, daemon=True).start()
 
-    # Render-safe native element container
+    # Display current slideshow banner natively
     st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
 
     # About Us Section
@@ -98,7 +110,7 @@ def show_homepage():
     with col3:
         with st.container(border=True):
             st.markdown("<h4 style='text-align: center;'>SPICES & POWDERS</h4>", unsafe_allow_html=True)
-            st.write("Finely processed aromatic dehydrated whole spices and herbal blends.")
+            st.write("Finely processed aromatic dehydrated whole spices and vegetable powder.")
             if st.button("View Products", key="spices_btn"):
                 st.session_state.page = "spices"
                 st.rerun()
@@ -111,12 +123,6 @@ def show_homepage():
                 st.session_state.page = "OTHER"
                 st.rerun()
 
-    # The magic fix: only sleep and cycle if the user hasn't switched pages!
-    time.sleep(5)
-    if st.session_state.page == "home":
-        st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
-        st.rerun()
-
 
 def show_vegetables_page():
     nav_col, title_col = st.columns([1, 4])
@@ -127,7 +133,6 @@ def show_vegetables_page():
     with title_col:
         st.markdown("<h2 style='margin:0; padding:0;'>🧅 Dehydrated Vegetables</h2>", unsafe_allow_html=True)
     st.write("---")
-    st.write("Premium selections coming soon.")
 
 
 def show_fruits_page():
@@ -139,7 +144,6 @@ def show_fruits_page():
     with title_col:
         st.markdown("<h2 style='margin:0; padding:0;'>🍓 Dehydrated Fruits</h2>", unsafe_allow_html=True)
     st.write("---")
-    st.write("Premium selections coming soon.")
 
 
 def show_spices_page():
@@ -151,7 +155,6 @@ def show_spices_page():
     with title_col:
         st.markdown("<h2 style='margin:0; padding:0;'>🌶️ Spices & Powders</h2>", unsafe_allow_html=True)
     st.write("---")
-    st.write("Premium selections coming soon.")
 
 
 def show_other_page():
@@ -161,12 +164,11 @@ def show_other_page():
             st.session_state.page = "home"
             st.rerun()
     with title_col:
-        st.markdown("<h2 style='margin:0; padding:0;'>🥞 Pickles, Chapathi & Poori</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='margin:0; padding:0;'> Pickles, Chapathi & Poori</h2>", unsafe_allow_html=True)
     st.write("---")
-    st.write("Premium selections coming soon.")
 
 
-# --- 3. PAGE ROUTER CONTROL ---
+# --- 4. PAGE ROUTER CONTROL ---
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
