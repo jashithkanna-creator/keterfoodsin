@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 st.set_page_config(layout="wide")
 st.markdown("""
@@ -39,8 +40,8 @@ if "slide_index" not in st.session_state:
 
 # --- 2. DEFINE THE PAGES ---
 
-# Clean isolated fragment loop
-@st.fragment(run_every=5)
+# This handles only the slideshow background switching cleanly
+@st.fragment
 def render_slideshow():
     homepage_slides = [
         "static/images/keter-hero.png",
@@ -49,12 +50,21 @@ def render_slideshow():
         "static/images/product-spice.png",
         "static/images/tamarind-powder.jpeg"
     ]
-    st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
+
+    # Safe rendering checker block
+    try:
+        st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
+    except:
+        # Emergency fallback if a file read dips on Render server
+        st.image("static/images/keter-hero.png", use_container_width=True)
+
+    time.sleep(5)
     st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
+    st.rerun()
 
 
 def show_homepage():
-    # Show the slideshow strictly here on the homepage
+    # Run isolated slideshow banner at the top
     render_slideshow()
 
     # About Us Section
@@ -165,8 +175,7 @@ def show_other_page():
     st.write("Premium selections coming soon.")
 
 
-# --- 3. MAIN ROUTER SYSTEM ---
-# By separating router control completely, the subpages load perfectly and fully.
+# --- 3. PAGE ROUTER CONTROL ---
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
