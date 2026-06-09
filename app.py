@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 
 st.set_page_config(layout="wide")
 st.markdown("""
@@ -40,8 +39,9 @@ if "slide_index" not in st.session_state:
 
 # --- 2. DEFINE THE PAGES ---
 
-def show_homepage():
-    # Native, render-safe slideshow tracking loop using your 5 exact folder images
+# Clean isolated fragment loop
+@st.fragment(run_every=5)
+def render_slideshow():
     homepage_slides = [
         "static/images/keter-hero.png",
         "static/images/dried-vegetables.jpeg",
@@ -49,9 +49,13 @@ def show_homepage():
         "static/images/product-spice.png",
         "static/images/tamarind-powder.jpeg"
     ]
-
-    # Display the current slide image safely
     st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
+    st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
+
+
+def show_homepage():
+    # Show the slideshow strictly here on the homepage
+    render_slideshow()
 
     # About Us Section
     st.header("About us")
@@ -112,11 +116,6 @@ def show_homepage():
                 st.session_state.page = "OTHER"
                 st.rerun()
 
-    # Automatically switches slide background data parameters safely every 6 seconds
-    time.sleep(6)
-    st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
-    st.rerun()
-
 
 def show_vegetables_page():
     nav_col, title_col = st.columns([1, 4])
@@ -166,7 +165,8 @@ def show_other_page():
     st.write("Premium selections coming soon.")
 
 
-# --- 3. PAGE ROUTER CONTROL ---
+# --- 3. MAIN ROUTER SYSTEM ---
+# By separating router control completely, the subpages load perfectly and fully.
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
