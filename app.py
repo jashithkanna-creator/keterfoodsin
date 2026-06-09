@@ -40,9 +40,7 @@ if "slide_index" not in st.session_state:
 
 # --- 2. DEFINE THE PAGES ---
 
-# This handles only the slideshow background switching cleanly
-@st.fragment
-def render_slideshow():
+def show_homepage():
     homepage_slides = [
         "static/images/keter-hero.png",
         "static/images/dried-vegetables.jpeg",
@@ -51,21 +49,8 @@ def render_slideshow():
         "static/images/tamarind-powder.jpeg"
     ]
 
-    # Safe rendering checker block
-    try:
-        st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
-    except:
-        # Emergency fallback if a file read dips on Render server
-        st.image("static/images/keter-hero.png", use_container_width=True)
-
-    time.sleep(5)
-    st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
-    st.rerun()
-
-
-def show_homepage():
-    # Run isolated slideshow banner at the top
-    render_slideshow()
+    # Render-safe native element container
+    st.image(homepage_slides[st.session_state.slide_index], use_container_width=True)
 
     # About Us Section
     st.header("About us")
@@ -125,6 +110,12 @@ def show_homepage():
             if st.button("View Products", key="OTHER_btn"):
                 st.session_state.page = "OTHER"
                 st.rerun()
+
+    # The magic fix: only sleep and cycle if the user hasn't switched pages!
+    time.sleep(5)
+    if st.session_state.page == "home":
+        st.session_state.slide_index = (st.session_state.slide_index + 1) % len(homepage_slides)
+        st.rerun()
 
 
 def show_vegetables_page():
