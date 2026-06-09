@@ -1,8 +1,8 @@
 import streamlit as st
-import base64
-import os
 
 st.set_page_config(layout="wide")
+
+# --- 1. CSS LAYOUT SPECIFICATION ---
 st.markdown("""
 <style>
 /* Style the navigation buttons to look like a modern navbar block */
@@ -24,80 +24,25 @@ div.stButton > button:first-child:hover {
 .stApp {
     background-color: #FDFBF7;
 }
+/* Increased padding-top to keep content completely safe from top-clipping */
 .block-container {
-    padding-top: 1rem;
+    padding-top: 4.5rem !important;
     padding-bottom: 2rem;
     max-width: 95% !important;
-}
-
-/* Perfect Client-Side CSS Slideshow Frame - Absolutely Zero Server Reruns */
-.carousel-container {
-    position: relative;
-    width: 100%;
-    height: 450px;
-    overflow: hidden;
-    border-radius: 12px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-.carousel-slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    animation: slideCycle 25s infinite ease-in-out;
-}
-.slide1 { animation-delay: 0s; }
-.slide2 { animation-delay: 5s; }
-.slide3 { animation-delay: 10s; }
-.slide4 { animation-delay: 15s; }
-.slide5 { animation-delay: 20s; }
-
-@keyframes slideCycle {
-    0% { opacity: 0; }
-    4% { opacity: 1; }
-    20% { opacity: 1; }
-    24% { opacity: 0; }
-    100% { opacity: 0; }
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Helper function to cleanly convert local files to Render-safe HTML strings
-def get_base64_image(image_path):
-    try:
-        with open(image_path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode()
-    except Exception:
-        return ""
-
-# --- 1. INITIALIZE NAVIGATION STATE ---
+# --- 2. INITIALIZE NAVIGATION STATE ---
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
 
-# --- 2. DEFINE THE PAGES ---
+# --- 3. DEFINE THE PAGES ---
 
 def show_homepage():
-    # Pre-encode all 5 images into memory for rendering stability
-    img1 = get_base64_image("static/images/keter-hero.png")
-    img2 = get_base64_image("static/images/dried-vegetables.jpeg")
-    img3 = get_base64_image("static/images/dehydrated-fruits.jpeg")
-    img4 = get_base64_image("static/images/product-spice.png")
-    img5 = get_base64_image("static/images/tamarind-powder.jpeg")
-
-    # Render CSS slideshow using memory strings
-    st.markdown(f"""
-    <div class="carousel-container">
-        <div class="carousel-slide slide1" style="background-image: url('data:image/png;base64,{img1}');"></div>
-        <div class="carousel-slide slide2" style="background-image: url('data:image/jpeg;base64,{img2}');"></div>
-        <div class="carousel-slide slide3" style="background-image: url('data:image/jpeg;base64,{img3}');"></div>
-        <div class="carousel-slide slide4" style="background-image: url('data:image/png;base64,{img4}');"></div>
-        <div class="carousel-slide slide5" style="background-image: url('data:image/jpeg;base64,{img5}');"></div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Direct, single image display to ensure no background threads interrupt routing
+    st.image("static/images/keter-hero.png", use_container_width=True)
 
     # About Us Section
     st.header("About us")
@@ -202,7 +147,7 @@ def show_other_page():
     st.write("Premium selections coming soon.")
 
 
-# --- 3. CLEAN PAGE ROUTER CONTROL ---
+# --- 4. RELIABLE ROUTER CONTROL SYSTEM ---
 if st.session_state.page == "home":
     show_homepage()
 elif st.session_state.page == "vegetables":
